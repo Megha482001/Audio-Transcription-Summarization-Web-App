@@ -33,7 +33,7 @@ function App() {
     formData.append('audio', audio);
 
     try {
-      const res = await fetch(process.env.REACT_APP_BACKEND_URL, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/upload`, {
         method: 'POST',
         body: formData,
       });
