@@ -27,6 +27,7 @@ cd Audio-Transcription-Summarization-Web-App
 ##  Backend Setup
 ```bash
 cd backend
+add the envs with the backend url from .env.example
 npm install
 npm run start
 ```
@@ -35,7 +36,7 @@ This will start the backend server, which listens for incoming requests to proce
 ##  Frontend Setup
 ```bash
 cd frontend
-add the envs with the api keys 
+add the envs with the api keys from .env.example
 npm install
 npm run start
 ```
