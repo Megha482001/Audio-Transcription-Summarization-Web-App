@@ -1,15 +1,14 @@
-// utils/transcribe.js
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
-// ✅ Gemini SDK
+//  Gemini SDK
 const { GoogleGenAI } = require('@google/genai');
 
-// 🔑 Initialize Gemini
+//  Initialize Gemini
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// 🔊 Transcription with AssemblyAI
+// Transcription with AssemblyAI
 async function transcribeAudio(filePath) {
   const audio = fs.readFileSync(filePath);
 
@@ -49,7 +48,7 @@ async function transcribeAudio(filePath) {
   return pollingRes.data.text;
 }
 
-// 🧠 Generate Summary with Gemini (Google Generative AI)
+// Generate Summary with Gemini 
 async function generateSummary(text) {
   const contents=`summarize the following text. ${text}`
   const response = await ai.models.generateContent({

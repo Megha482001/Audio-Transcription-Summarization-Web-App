@@ -14,12 +14,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ✅ Route to handle upload
+//  Route to handle upload
 router.post('/', upload.single('audio'), async (req, res) => {
   try {
-   // console.log('🔔 Upload route hit');
-    //console.log('📁 req.file:', req.file);
-
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
@@ -27,22 +24,19 @@ router.post('/', upload.single('audio'), async (req, res) => {
     const filePath = path.join(__dirname, '../uploads', req.file.filename);
 
     const transcript = await transcribeAudio(filePath);
-    console.log('📝 Transcript:', transcript);
+    console.log('Transcript:', transcript);
 
     const summary = await generateSummary(transcript);
-    console.log('📄 Summary:', summary);
+    console.log('Summary:', summary);
 
     fs.unlinkSync(filePath); // Clean up
 
     res.json({ transcript, summary });
   } catch (err) {
-    console.error('🔥 Multer or other error:', err.message);
+    console.error(' Multer or other error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
-
-//console.log('Received file:', req.file.filename);
-
 
 
 module.exports = router;

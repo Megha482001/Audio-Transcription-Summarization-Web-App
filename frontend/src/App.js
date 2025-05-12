@@ -1,7 +1,12 @@
-// src/App.js
 import React, { useState } from 'react';
+import {
+  Container,
+  Typography,
+  Button,
+  CircularProgress,
+  Alert,
+} from '@mui/material';
 import './App.css';
-
 function App() {
   const [audio, setAudio] = useState(null);
   const [transcript, setTranscript] = useState('');
@@ -18,65 +23,93 @@ function App() {
 
   const handleUpload = async () => {
     if (!audio) {
-      setError("Please select an audio file first.");
+      setError('Please select an audio file first.');
       return;
     }
 
     setLoading(true);
     setError('');
     const formData = new FormData();
-    
     formData.append('audio', audio);
 
     try {
-     const res = await fetch('http://localhost:5000/upload', {
-  method: 'POST',
-  body: formData
-});
+      const res = await fetch(process.env.REACT_APP_BACKEND_URL, {
+        method: 'POST',
+        body: formData,
+      });
 
-if (!res.ok) {
-  const errorData = await res.text(); // try to capture the raw error
-  throw new Error(`Server error: ${res.status} - ${errorData}`);
-  }
-  const data = await res.json();
-      if(data.transcript){
-        setTranscript(data.transcript);
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`Server error: ${res.status} - ${errorData}`);
       }
-      if(data.summary){
-        setSummary(data.summary);
-      }
+
+      const data = await res.json();
+      if (data.transcript) setTranscript(data.transcript);
+      if (data.summary) setSummary(data.summary);
     } catch (err) {
       console.error(err);
-      setError("Upload failed. Please try again.");
+      setError('Upload failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="App">
-      <h1>🎙️ Audio Transcription & Summary</h1>
+    <Container maxWidth="sm">
+      <Typography variant="h4" gutterBottom>
+        🎙️ Audio Transcription & Summary
+      </Typography>
 
       <input type="file" accept="audio/*" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload & Transcribe</button>
 
-      {loading && <p>⏳ Processing... please wait.</p>}
-      {error && <p style={{ color: 'red' }}>⚠️ {error}</p>}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleUpload}
+        disabled={loading}
+      >
+        {loading ? 'Processing...' : 'Upload & Transcribe'}
+      </Button>
+
+      {loading && (
+        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+          <CircularProgress color="primary" />
+        </div>
+      )}
+
+      {error && (
+        <Alert severity="error" style={{ marginTop: '1rem' }}>
+          {error}
+        </Alert>
+      )}
+
+      {audio && (
+        <div style={{ marginTop: '1.5rem' }}>
+          <Typography variant="h6" gutterBottom>
+            🔊 Audio Preview
+          </Typography>
+          <audio controls src={URL.createObjectURL(audio)} style={{ width: '100%' }} />
+        </div>
+      )}
 
       {transcript && (
-        <>
-          <h2>📝 Transcript</h2>
-          <p>{transcript}</p>
-        </>
+        <div className="typography-section">
+          <Typography variant="h6" gutterBottom>
+            📝 Transcript
+          </Typography>
+          <Typography>{transcript}</Typography>
+        </div>
       )}
 
       {summary && (
-        <>
-          <h2>📄 Summary</h2>
-          <p>{summary}</p>
-        </>
+        <div className="typography-section">
+          <Typography variant="h6" gutterBottom>
+            📄 Summary
+          </Typography>
+          <Typography>{summary}</Typography>
+        </div>
       )}
-    </div>
+    </Container>
   );
 }
 
