@@ -55,7 +55,13 @@ function App() {
   };
 
   return (
+    
     <Container maxWidth="sm">
+      <div>
+  {[...Array(10)].map((_, i) => (
+    <div key={i} className="sparkle" style={{ top: `${i * 10}vh`, left: `${Math.random() * 100}%` }} />
+  ))}
+</div>
       <Typography variant="h4" gutterBottom>
         🎙️ Audio Transcription & Summary
       </Typography>
@@ -71,11 +77,14 @@ function App() {
         {loading ? 'Processing...' : 'Upload & Transcribe'}
       </Button>
 
-      {loading && (
-        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
-          <CircularProgress color="primary" />
-        </div>
-      )}
+    {loading && (
+  <div className="loader-container">
+    <div className="cute-loader" />
+    <Typography variant="body2" style={{ marginTop: '1rem', textAlign: 'center' }}>
+      Transcribing magic in progress... ✨🎧
+    </Typography>
+  </div>
+)}
 
       {error && (
         <Alert severity="error" style={{ marginTop: '1rem' }}>
