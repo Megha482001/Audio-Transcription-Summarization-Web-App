@@ -57,3 +57,7 @@ This will launch the frontend application in your default web browser, typically
 - **User Interface**: Built with React, providing components for file upload and displaying results.
 - **API Integration**: Sends audio files to the backend and receives transcription and summary data.
 - **State Management**: Manages application state to reflect processing status and display results dynamically.
+
+### Deployed Link
+
+- **https://audio-transcription-summarization.netlify.app/
